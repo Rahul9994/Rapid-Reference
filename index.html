@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Rapid_Reference — Learn faster. Revise smarter.</title>
+    <meta
+      name="description"
+      content="Your fast-track reference for Python, DSA, OS, DBMS, Computer Networks and technical interviews — with Striver's A2Z DSA sheet progress tracking."
+    />
+    <meta name="theme-color" content="#09090b" />
+    <meta property="og:title" content="Rapid_Reference" />
+    <meta property="og:description" content="Learn faster. Revise smarter. Python, DSA, OS, DBMS, CN notes + A2Z DSA sheet + interview FAQ." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong theme.
+      ;(function () {
+        var theme = 'dark'
+        try {
+          var saved = JSON.parse(localStorage.getItem('rr:theme') || '"system"')
+          theme = saved === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+            : saved
+        } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
+  </head>
+  <body>
+    <noscript>Rapid_Reference needs JavaScript enabled to run.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
