@@ -1,23 +1,6 @@
 import { Marked, Renderer, type RendererObject, type RendererThis, type Tokens } from 'marked'
-import hljs from 'highlight.js/lib/core'
-import python from 'highlight.js/lib/languages/python'
-import sql from 'highlight.js/lib/languages/sql'
-import bash from 'highlight.js/lib/languages/bash'
-import json from 'highlight.js/lib/languages/json'
-import plaintext from 'highlight.js/lib/languages/plaintext'
-import http from 'highlight.js/lib/languages/http'
-import c from 'highlight.js/lib/languages/c'
+import { hljs } from './highlight'
 import { escapeHtml, slugify } from './utils'
-
-hljs.registerLanguage('python', python)
-hljs.registerLanguage('sql', sql)
-hljs.registerLanguage('bash', bash)
-hljs.registerLanguage('json', json)
-hljs.registerLanguage('plaintext', plaintext)
-hljs.registerLanguage('http', http)
-hljs.registerLanguage('c', c)
-hljs.registerAliases(['py'], { languageName: 'python' })
-hljs.registerAliases(['sh', 'shell', 'console'], { languageName: 'bash' })
 
 export interface TocItem {
   id: string
@@ -28,6 +11,16 @@ export interface TocItem {
 export interface RenderedDoc {
   html: string
   toc: TocItem[]
+}
+
+/** The subset of KaTeX we use — passed in so KaTeX is only loaded on pages with math. */
+export interface MathRenderer {
+  renderToString: (tex: string, options?: { displayMode?: boolean; throwOnError?: boolean }) => string
+}
+
+export interface RenderOptions {
+  /** Enables $inline$ and $$block$$ math. */
+  katex?: MathRenderer
 }
 
 const svg = (paths: string, cls = '') =>
@@ -84,7 +77,44 @@ function preprocessCallouts(md: string, inline: (s: string) => string): string {
   return out.join('\n')
 }
 
-export function renderMarkdown(md: string): RenderedDoc {
+function mathExtensions(katex: MathRenderer) {
+  const render = (tex: string, displayMode: boolean) => {
+    try {
+      return katex.renderToString(tex, { displayMode, throwOnError: false })
+    } catch {
+      return `<code>${escapeHtml(tex)}</code>`
+    }
+  }
+  return [
+    {
+      name: 'blockMath',
+      level: 'block' as const,
+      start: (src: string) => src.match(/^\$\$/m)?.index,
+      tokenizer(src: string) {
+        const m = /^\$\$([\s\S]+?)\$\$[ \t]*(?:\n|$)/.exec(src)
+        if (m) return { type: 'blockMath', raw: m[0], text: m[1].trim() }
+        return undefined
+      },
+      renderer: (token: Tokens.Generic) => `<div class="math-block" tabindex="0">${render(token.text as string, true)}</div>\n`,
+    },
+    {
+      name: 'inlineMath',
+      level: 'inline' as const,
+      start: (src: string) => {
+        const i = src.indexOf('$')
+        return i < 0 ? undefined : i
+      },
+      tokenizer(src: string) {
+        const m = /^\$((?:\\\$|[^$\n])+?)\$/.exec(src)
+        if (m) return { type: 'inlineMath', raw: m[0], text: m[1] }
+        return undefined
+      },
+      renderer: (token: Tokens.Generic) => `<span class="math-inline">${render(token.text as string, false)}</span>`,
+    },
+  ]
+}
+
+export function renderMarkdown(md: string, options: RenderOptions = {}): RenderedDoc {
   const toc: TocItem[] = []
   const used = new Map<string, number>()
 
@@ -107,6 +137,12 @@ export function renderMarkdown(md: string): RenderedDoc {
       const info = (lang || '').trim()
       const first = info.split(/\s+/)[0]?.toLowerCase() ?? ''
       const rest = info.slice(first.length).trim()
+
+      if (first === 'viz') {
+        // Placeholder hydrated with a live React visualization by the lab pages.
+        const [id = '', ...caption] = rest.split(/\s+/)
+        return `<div class="viz-slot" data-viz="${escapeHtml(id)}" data-caption="${escapeHtml(caption.join(' '))}"></div>\n`
+      }
 
       if (first === 'diagram') {
         const caption = rest ? `<figcaption>${escapeHtml(rest)}</figcaption>` : ''
@@ -138,6 +174,7 @@ export function renderMarkdown(md: string): RenderedDoc {
   }
 
   const marked = new Marked({ gfm: true, breaks: false, renderer })
+  if (options.katex) marked.use({ extensions: mathExtensions(options.katex) })
   const source = preprocessCallouts(md, (s) => marked.parseInline(s) as string)
   const html = wrapSections(marked.parse(source) as string)
   return { html, toc }

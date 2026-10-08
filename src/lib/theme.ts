@@ -8,7 +8,7 @@ const lightQuery = () => window.matchMedia('(prefers-color-scheme: light)')
 
 export function resolveTheme(choice: ThemeChoice): ThemeId {
   if (choice !== 'system') return choice
-  return lightQuery().matches ? 'light' : 'dark'
+  return lightQuery().matches ? 'ivory' : 'noir'
 }
 
 function syncMetaThemeColor() {

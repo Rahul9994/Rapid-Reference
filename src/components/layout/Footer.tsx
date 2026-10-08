@@ -13,6 +13,8 @@ const columns = [
     links: [
       { label: 'Home', to: '/' },
       { label: 'Notes', to: '/notes' },
+      { label: 'A.I', to: '/ai' },
+      { label: 'M.L', to: '/ml' },
       { label: 'DSA Sheet', to: '/dsa-sheet' },
       { label: 'FAQ', to: '/faq' },
     ],

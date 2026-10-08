@@ -1,7 +1,8 @@
 import { useEffect, type ReactNode } from 'react'
-import { ArrowUpRight, BookOpen, Database, Keyboard, ListChecks, Lock, Sparkles } from 'lucide-react'
+import { ArrowUpRight, BookOpen, BrainCircuit, Database, Keyboard, ListChecks, Lock, Sparkles } from 'lucide-react'
 import { site } from '../data/site'
-import { totalTopics } from '../data/notes'
+import { totalAllTopics } from '../data/catalog'
+import { totalLabTopics } from '../data/labs'
 import sheetMeta from '../data/a2z-meta.json'
 import { PageShell } from '../components/layout/PageShell'
 import { Kbd, ModKey, SectionLabel } from '../components/ui/misc'
@@ -45,8 +46,9 @@ export default function About() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-              {site.name} is a fast, keyboard-first revision companion: {totalTopics} topics of concise notes, the complete Striver&apos;s A2Z
-              DSA sheet with progress tracking, and a bank of interview questions you can quiz yourself on.
+              {site.name} is a fast, keyboard-first revision companion: {totalAllTopics} topics of concise notes (including {totalLabTopics}{' '}
+              interactive A.I and M.L lessons), the complete Striver&apos;s A2Z DSA sheet with progress tracking, and a bank of interview
+              questions you can quiz yourself on.
             </p>
           </Reveal>
         </div>
@@ -62,6 +64,20 @@ export default function About() {
             </a>
             ; OS, DBMS and networking explanations follow standard textbook definitions. When in doubt, the official docs and
             standards are the source of truth.
+          </p>
+        </Block>
+
+        <Block icon={<BrainCircuit size={18} />} title="A.I & M.L labs — original simulations" delay={0.03}>
+          <p>
+            Every A.I and M.L lesson opens with a visualization that actually runs the algorithm in your browser — gradient descent,
+            k-means, A*, minimax, Q-learning and more — while the matching Python is highlighted line by line. The Python shown is real,
+            runnable code; the browser simulation mirrors it step for step.
+          </p>
+          <p>
+            Datasets are small and generated for clarity (the iris example uses Fisher&apos;s public-domain Iris data). The word-embedding
+            and attention labs use hand-made toy vectors to illustrate the idea — they are labelled as such and are not outputs of a
+            trained model. Formulas follow standard references such as Russell &amp; Norvig&apos;s <em>Artificial Intelligence: A Modern
+            Approach</em> and the scikit-learn documentation.
           </p>
         </Block>
 

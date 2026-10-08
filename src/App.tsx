@@ -13,6 +13,8 @@ import Home from './pages/Home'
 
 const NotesHome = lazy(() => import('./pages/NotesHome'))
 const NotesDocs = lazy(() => import('./pages/NotesDocs'))
+const LabHome = lazy(() => import('./pages/LabHome'))
+const LabTopic = lazy(() => import('./pages/LabTopic'))
 const DsaSheet = lazy(() => import('./pages/DsaSheet'))
 const Faq = lazy(() => import('./pages/Faq'))
 const About = lazy(() => import('./pages/About'))
@@ -70,6 +72,10 @@ export default function App({ boot }: { boot: boolean }) {
           <Route path="/notes" element={<Lazy><NotesHome /></Lazy>} />
           <Route path="/notes/:category" element={<Lazy><NotesDocs /></Lazy>} />
           <Route path="/notes/:category/:topic" element={<Lazy><NotesDocs /></Lazy>} />
+          <Route path="/ai" element={<Lazy><LabHome trackId="ai" /></Lazy>} />
+          <Route path="/ai/:topic" element={<Lazy><LabTopic trackId="ai" /></Lazy>} />
+          <Route path="/ml" element={<Lazy><LabHome trackId="ml" /></Lazy>} />
+          <Route path="/ml/:topic" element={<Lazy><LabTopic trackId="ml" /></Lazy>} />
           <Route path="/dsa-sheet" element={<Lazy><DsaSheet /></Lazy>} />
           <Route path="/faq" element={<Lazy><Faq /></Lazy>} />
           <Route path="/about" element={<Lazy><About /></Lazy>} />

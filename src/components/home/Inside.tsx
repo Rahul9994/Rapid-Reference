@@ -1,7 +1,9 @@
 import type { CSSProperties, MouseEvent as ReactMouseEvent, ReactNode } from 'react'
 import { motion } from 'motion/react'
 import { Command, Database, FileText, Palette, Search, ShieldCheck } from 'lucide-react'
-import { allTopics, totalTopics } from '../../data/notes'
+import { allTopics } from '../../data/notes'
+import { allLabTopics, totalLabTopics } from '../../data/labs'
+import { totalAllTopics } from '../../data/catalog'
 import { themes } from '../../data/themes'
 import sheetMeta from '../../data/a2z-meta.json'
 import { setTheme, themeStore } from '../../lib/theme'
@@ -175,7 +177,7 @@ function ThemesMock() {
   const choice = themeStore.use()
   const pick = (id: (typeof themes)[number]['id'], e: ReactMouseEvent) => setTheme(id, { x: e.clientX, y: e.clientY })
   return (
-    <div className="absolute inset-0 grid grid-cols-4 place-content-center gap-2.5 px-1">
+    <div className="absolute inset-0 grid grid-cols-5 place-content-center gap-2 px-1">
       {themes.map((t) => (
         <button
           key={t.id}
@@ -184,7 +186,7 @@ function ThemesMock() {
           aria-label={`Switch to ${t.name} theme`}
           title={t.name}
           className={cn(
-            'mx-auto h-10 w-10 rounded-full border-2 transition-transform duration-300 hover:scale-110 sm:h-11 sm:w-11',
+            'mx-auto h-9 w-9 rounded-full border-2 transition-transform duration-300 hover:scale-110 sm:h-10 sm:w-10',
             choice === t.id ? 'border-[var(--accent)] scale-110' : 'border-[var(--border-strong)]',
           )}
           style={{ background: 'conic-gradient(from 210deg, var(--bg) 0 50%, var(--accent) 50% 75%, var(--accent-2) 75% 100%)' } as CSSProperties}
@@ -194,24 +196,33 @@ function ThemesMock() {
   )
 }
 
+const marqueeItems = [
+  ...allTopics.map((t) => ({ key: t.key, title: t.title, hue: t.category.hue, icon: t.category.id })),
+  ...allLabTopics.map((t) => ({ key: t.key, title: t.title, hue: t.track.hue, icon: t.track.id })),
+]
+  // interleave so both rows mix subjects
+  .map((t, i) => ({ t, k: (i * 37) % 149 }))
+  .sort((a, b) => a.k - b.k)
+  .map((x) => x.t)
+
 function Marquee() {
-  const half = Math.ceil(allTopics.length / 2)
-  const rows = [allTopics.slice(0, half), allTopics.slice(half)]
+  const half = Math.ceil(marqueeItems.length / 2)
+  const rows = [marqueeItems.slice(0, half), marqueeItems.slice(half)]
   return (
     <div className="mask-x relative mt-16 space-y-3 overflow-hidden" aria-hidden="true">
       {rows.map((row, r) => (
         <div key={r} className="group flex w-max">
           <div
             className="animate-marquee flex gap-3 pr-3 group-hover:[animation-play-state:paused]"
-            style={{ '--dur': `${r === 0 ? 90 : 110}s`, animationDirection: r === 1 ? 'reverse' : 'normal' } as CSSProperties}
+            style={{ '--dur': `${r === 0 ? 110 : 130}s`, animationDirection: r === 1 ? 'reverse' : 'normal' } as CSSProperties}
           >
             {[...row, ...row].map((t, i) => (
               <span
                 key={`${t.key}-${i}`}
                 className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-elev/70 px-3.5 py-1.5 text-[13px] text-muted"
               >
-                <span style={{ color: t.category.hue }}>
-                  <CategoryIcon id={t.category.id} size={13} />
+                <span style={{ color: t.hue }}>
+                  <CategoryIcon id={t.icon} size={13} />
                 </span>
                 {t.title}
               </span>
@@ -225,10 +236,10 @@ function Marquee() {
 
 export function Inside() {
   const stats = [
-    { value: totalTopics, suffix: '', label: 'Topics across 5 subjects' },
+    { value: totalAllTopics, suffix: '', label: 'Topics across 7 subjects' },
     { value: sheetMeta.total, suffix: '', label: "Striver's A2Z sheet items" },
     { value: FAQ_COUNT, suffix: '+', label: 'Interview Q&As' },
-    { value: themes.length, suffix: '', label: 'Hand-tuned themes' },
+    { value: totalLabTopics, suffix: '', label: 'Interactive AI & ML labs' },
   ]
   return (
     <section className="relative py-24 sm:py-32" aria-labelledby="inside-title">

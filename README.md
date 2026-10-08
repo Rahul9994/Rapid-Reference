@@ -4,16 +4,17 @@
 
 **Live site: https://rahul9994.github.io/Rapid-Reference/**
 
-A fast, keyboard-first revision site for **Python, DSA (in Python), Operating Systems, DBMS, Computer Networks** and **technical interviews** — with the complete **Striver's A2Z DSA Sheet** as a progress tracker.
+A fast, keyboard-first revision site for **Python, DSA (in Python), AI, Machine Learning, Operating Systems, DBMS, Computer Networks** and **technical interviews** — with interactive AI/ML labs and the complete **Striver's A2Z DSA Sheet** as a progress tracker.
 
 ## Features
 
 - **Landing page** — animated hero (graph-constellation canvas, floating code/terminal/BST/SQL cards, letter-reveal headline), first-visit boot animation, scroll-triggered sections.
-- **12 themes** — Dark, Light, Midnight, Cyberpunk, Aurora, AMOLED, Dracula, Ocean, Forest, Sunset, Nord, Sepia (+ System). Live mini-previews, circular reveal transition, saved in `localStorage`, applied before first paint.
+- **14 themes** — Noir and Ivory (the defaults for dark / light system preference), Dark, Light, Midnight, Cyberpunk, Aurora, AMOLED, Dracula, Ocean, Forest, Sunset, Nord, Sepia (+ System). Live mini-previews, circular reveal transition, saved in `localStorage`, applied before first paint.
 - **Notes** — 109 topics (Python 27 · DSA 28 · OS 17 · DBMS 18 · CN 19) with sidebar topic tree, filter, breadcrumbs, scroll-spy table of contents, collapsible sections, copy-code buttons, callouts (tips / common mistakes / interview notes / remember this), reading progress, prev/next (`[` `]`), bookmarks and recently viewed.
+- **A.I and M.L** — 37 lessons (AI 16 · ML 21), each opening with a live, animated lab that runs the algorithm in the browser: play / pause / step / speed, parameter sliders, and real Python with the executing line highlighted and live variables (linear regression, gradient descent, k-means, SVM, neural networks, CNNs, A*, minimax, Q-learning, attention, LLM sampling and more). Notes include KaTeX formulas, verified code outputs and interview Q&A.
 - **DSA SHEET** — 495 items (452 problems + 43 lessons) across 20 sections in the original A2Z order. Search, section / difficulty / status filters, sorting, progress ring, difficulty + topic-wise progress, confetti on finishing a section, random unsolved problem, export / import / reset progress (with undo).
-- **FAQ** — 134 interview questions in 8 categories with animated *Reveal Answer / Hide Answer* cards, search, category filters, reveal-all, "Quiz me" and shareable deep links.
-- **Global search** — `Ctrl/⌘ + K` or `/` opens a command palette that searches every note section, FAQ answer and A2Z problem (1,800+ entries) with grouped, highlighted results and keyboard navigation.
+- **FAQ** — 170 interview questions in 10 categories with animated *Reveal Answer / Hide Answer* cards, search, category filters, reveal-all, "Quiz me" and shareable deep links.
+- **Global search** — `Ctrl/⌘ + K` or `/` opens a command palette that searches every note and lesson section, FAQ answer and A2Z problem (2,000+ entries) with grouped, highlighted results and keyboard navigation.
 - Responsive from 320px phones to 2560px+ monitors, `prefers-reduced-motion` support, focus states, skip link, custom 404, toasts, skeletons and empty states.
 
 ## Getting started
@@ -49,6 +50,8 @@ npx vite preview --base /Rapid-Reference/
 | GitHub link in the footer / About page | `src/data/site.ts` → `github` |
 | Hosting sub-path | `BASE_PATH` env var at build time (root `/` by default) |
 | Add or edit a note | `src/content/notes/<category>/<slug>.md` + an entry in `src/data/notes.ts` |
+| Add or edit an A.I / M.L lesson | `src/content/<ai or ml>/<slug>.md` + an entry in `src/data/labs.ts` (its `viz` id) |
+| Add an interactive lab | a component in `src/viz/<ai or ml>/`, registered in `src/viz/registry.ts`; embed extra labs in notes with a ```` ```viz <id> ```` fence |
 | Add FAQ questions | `src/content/faq/<category>.md` — each `## Question` heading followed by its answer |
 | Theme colours | `src/styles/themes.css` (+ names in `src/data/themes.ts`) |
 | FAQ count shown on the landing page | `src/components/home/constants.ts` |

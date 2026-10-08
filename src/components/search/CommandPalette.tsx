@@ -22,7 +22,7 @@ import { buildSearchIndex, excerpt, searchIndex, type SearchDoc } from '../../li
 import { recentStore } from '../../lib/storage'
 import { setTheme } from '../../lib/theme'
 import { themes } from '../../data/themes'
-import { topicByKey } from '../../data/notes'
+import { lookupTopic } from '../../data/catalog'
 import { useRandomActions } from '../../lib/random'
 import { cn, formatNumber } from '../../lib/utils'
 import { useBodyScrollLock, useFocusTrap } from '../../hooks'
@@ -98,15 +98,15 @@ export default function CommandPalette() {
     if (!q) {
       const out: Group[] = []
       const recentItems = recent
-        .map((r) => topicByKey.get(r.key))
+        .map((r) => lookupTopic(r.key))
         .filter((t) => t !== undefined)
         .slice(0, 4)
         .map<Item>((t) => ({
           id: `recent:${t.key}`,
           title: t.title,
-          subtitle: t.category.title,
+          subtitle: t.groupTitle,
           icon: <History size={16} />,
-          url: `/notes/${t.category.id}/${t.slug}`,
+          url: t.path,
         }))
       if (recentItems.length) out.push({ label: 'Recently viewed', items: recentItems })
       out.push({
@@ -114,6 +114,8 @@ export default function CommandPalette() {
         items: [
           { id: 'go:home', title: 'Home', icon: <Home size={16} />, url: '/' },
           { id: 'go:notes', title: 'Notes', subtitle: 'Python · DSA · OS · DBMS · CN', icon: <BookOpen size={16} />, url: '/notes' },
+          { id: 'go:ai', title: 'A.I — Artificial Intelligence', subtitle: '16 lessons with interactive labs', icon: <CategoryIcon id="ai" size={16} />, url: '/ai' },
+          { id: 'go:ml', title: 'M.L — Machine Learning', subtitle: '21 lessons: code + graph, in motion', icon: <CategoryIcon id="ml" size={16} />, url: '/ml' },
           { id: 'go:sheet', title: 'DSA SHEET', subtitle: "Striver's A2Z — track your progress", icon: <ListChecks size={16} />, url: '/dsa-sheet' },
           { id: 'go:faq', title: 'Interview FAQ', subtitle: 'Reveal-style Q&A', icon: <MessageSquareQuote size={16} />, url: '/faq' },
           { id: 'go:about', title: 'About & sources', icon: <Info size={16} />, url: '/about' },
@@ -243,7 +245,7 @@ export default function CommandPalette() {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search notes, FAQ, A2Z problems…"
+                placeholder="Search notes, AI & ML labs, FAQ, A2Z problems…"
                 className="h-14 min-w-0 flex-1 bg-transparent text-[15px] text-fg outline-none placeholder:text-subtle sm:h-16 sm:text-base"
                 aria-label="Search query"
                 aria-controls="palette-results"

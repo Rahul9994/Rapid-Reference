@@ -1,6 +1,7 @@
 import { noteCategories } from '../data/notes'
+import { labTracks } from '../data/labs'
 import { faqCategories } from '../data/faq'
-import { loadFaq, loadNoteBundle } from './content'
+import { loadFaq, loadLabBundle, loadNoteBundle } from './content'
 import { flattenSheet, loadSheet } from './sheet'
 import { slugify, stripMarkdown } from './utils'
 
@@ -98,6 +99,39 @@ export function buildSearchIndex(): Promise<SearchDoc[]> {
       }
     })
 
+    const labBundles = await Promise.all(labTracks.map((t) => loadLabBundle(t.id)))
+    labTracks.forEach((track, ti) => {
+      const bundle = labBundles[ti]
+      for (const topic of track.topics) {
+        const md = bundle[`./${topic.slug}.md`] ?? ''
+        const base = `${track.path}/${topic.slug}`
+        docs.push(
+          doc({
+            id: `t:${track.id}/${topic.slug}`,
+            kind: 'topic',
+            group: track.title,
+            title: topic.title,
+            subtitle: `${track.label} · ${topic.summary}`,
+            text: stripMath(stripMarkdown(md.slice(0, 1200))),
+            url: base,
+          }),
+        )
+        for (const s of splitSections(md)) {
+          docs.push(
+            doc({
+              id: `s:${track.id}/${topic.slug}#${s.id}`,
+              kind: 'section',
+              group: track.title,
+              title: s.heading.replace(/\$/g, ''),
+              subtitle: `${track.label} › ${topic.title}`,
+              text: stripMath(stripMarkdown(s.body.join('\n'))).slice(0, 1500),
+              url: `${base}#${s.id}`,
+            }),
+          )
+        }
+      }
+    })
+
     const faqs = await loadFaq()
     const faqTitle = Object.fromEntries(faqCategories.map((c) => [c.id, c.title]))
     for (const f of faqs) {
@@ -139,7 +173,17 @@ export function buildSearchIndex(): Promise<SearchDoc[]> {
   return indexPromise
 }
 
-const GROUP_ORDER = ['Python', 'DSA Notes', 'Operating Systems', 'Database Management Systems', 'Computer Networks', 'Interview FAQ', 'DSA Sheet']
+const GROUP_ORDER = ['Python', 'DSA Notes', 'Machine Learning', 'Artificial Intelligence', 'Operating Systems', 'Database Management Systems', 'Computer Networks', 'Interview FAQ', 'DSA Sheet']
+
+/** Drop TeX delimiters and commands so formulas don't pollute search text. */
+function stripMath(text: string): string {
+  return text
+    .replace(/\$\$[\s\S]*?\$\$/g, ' ')
+    .replace(/\$([^$]+)\$/g, '$1')
+    .replace(/\\[a-zA-Z]+/g, ' ')
+    .replace(/[{}^_]/g, ' ')
+    .replace(/\s+/g, ' ')
+}
 
 export function searchIndex(docs: SearchDoc[], query: string, perGroup = 5): SearchGroup[] {
   const q = query.trim().toLowerCase()

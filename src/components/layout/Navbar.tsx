@@ -45,14 +45,14 @@ export function Navbar() {
 
   return (
     <>
-      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-[max(0.6rem,env(safe-area-inset-top))] sm:px-4 sm:pt-3">
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-[max(0.6rem,env(safe-area-inset-top))] sm:px-0 sm:pt-3">
         <nav
           aria-label="Primary"
           className={cn(
             'pointer-events-auto flex w-full items-center justify-between gap-3 rounded-full border transition-[max-width,height,padding,background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[var(--ease-out-expo)]',
             scrolled || menuOpen
-              ? 'glass h-[52px] max-w-[880px] border-line-strong pl-3 pr-2 shadow-[var(--shadow-lift)] sm:pl-4'
-              : 'h-[60px] max-w-[1240px] border-transparent bg-transparent pl-2 pr-1 sm:pl-3',
+              ? 'glass h-[52px] max-w-[880px] border-line-strong pl-3 pr-2 shadow-[var(--shadow-lift)] sm:w-[calc(100%-2rem)] sm:pl-4'
+              : 'h-[60px] max-w-[1240px] border-transparent bg-transparent pl-2 pr-1 sm:pl-8 sm:pr-8',
           )}
         >
           <Link to="/" className="rounded-full outline-offset-4" aria-label="Rapid_Reference home">

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router'
 import { motion } from 'motion/react'
 import { ArrowRight, Bookmark, History, Search, SearchX, Shuffle, X } from 'lucide-react'
-import { noteCategories, topicByKey, totalTopics } from '../data/notes'
+import { noteCategories, totalTopics } from '../data/notes'
+import { lookupTopic, type AnyTopic } from '../data/catalog'
 import { bookmarksStore, recentStore } from '../lib/storage'
 import { prefetchNotes } from '../lib/content'
 import { useRandomActions } from '../lib/random'
@@ -38,8 +39,8 @@ export default function NotesHome() {
     [q],
   )
 
-  const recentTopics = recent.map((r) => topicByKey.get(r.key)).filter((t) => t !== undefined).slice(0, 5)
-  const saved = bookmarks.map((k) => topicByKey.get(k)).filter((t) => t !== undefined)
+  const recentTopics = recent.map((r) => lookupTopic(r.key)).filter((t) => t !== undefined).slice(0, 5)
+  const saved = bookmarks.map((k) => lookupTopic(k)).filter((t) => t !== undefined)
 
   return (
     <PageShell>
@@ -195,7 +196,7 @@ function ShelfCard({
 }: {
   icon: ReactNode
   title: string
-  items: NonNullable<ReturnType<typeof topicByKey.get>>[]
+  items: AnyTopic[]
 }) {
   return (
     <div className="card-surface rounded-3xl p-5">
@@ -206,11 +207,11 @@ function ShelfCard({
         {items.slice(0, 8).map((t) => (
           <li key={t.key}>
             <Link
-              to={`/notes/${t.category.id}/${t.slug}`}
+              to={t.path}
               className="inline-flex items-center gap-1.5 rounded-full border border-line bg-bg/40 px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-line-strong hover:text-fg"
             >
-              <span style={{ color: t.category.hue }}>
-                <CategoryIcon id={t.category.id} size={12} />
+              <span style={{ color: t.hue }}>
+                <CategoryIcon id={t.group} size={12} />
               </span>
               {t.title}
             </Link>

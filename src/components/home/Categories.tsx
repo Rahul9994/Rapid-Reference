@@ -1,7 +1,8 @@
 import { Link } from 'react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { noteCategories } from '../../data/notes'
-import { prefetchNotes } from '../../lib/content'
+import { labTracks } from '../../data/labs'
+import { prefetchLab, prefetchNotes } from '../../lib/content'
 import { trackSpotlight } from '../../hooks'
 import { Reveal } from '../ui/Reveal'
 import { CategoryIcon } from '../ui/CategoryIcon'
@@ -19,8 +20,7 @@ interface CardData {
   onIntent?: () => void
 }
 
-const cards: CardData[] = [
-  ...noteCategories.map((c) => ({
+const noteCards: CardData[] = noteCategories.map((c) => ({
     id: c.id,
     title: c.title,
     description: c.description,
@@ -29,14 +29,31 @@ const cards: CardData[] = [
     count: `${c.topics.length} topics`,
     chips: c.topics.slice(0, 4).map((t) => t.title.replace(/^OOP: /, '')),
     onIntent: () => prefetchNotes(c.id),
-  })),
+}))
+
+const labCards: CardData[] = labTracks.map((t) => ({
+  id: t.id,
+  title: t.title,
+  description: t.description.split(' — ')[0] + '.',
+  hue: t.hue,
+  to: t.path,
+  count: `${t.topics.length} interactive labs`,
+  chips: t.id === 'ai' ? ['A* search', 'Minimax', 'Q-learning', 'Transformers'] : ['Regression', 'Trees', 'K-means', 'Neural nets'],
+  onIntent: () => prefetchLab(t.id),
+}))
+
+const cards: CardData[] = [
+  noteCards[0],
+  noteCards[1],
+  ...labCards,
+  ...noteCards.slice(2),
   {
     id: 'interview',
     title: 'Interview Preparation',
     description: 'Commonly asked technical and HR questions with crisp, revisable answers.',
     hue: '#f472b6',
     to: '/faq',
-    count: '8 categories',
+    count: '10 categories',
     chips: ['Python', 'OOP', 'DBMS', 'HR basics'],
   },
 ]
@@ -49,14 +66,14 @@ export function Categories() {
           label="Knowledge categories"
           title={
             <span id="cat-title">
-              Six tracks. <Accent>Zero fluff.</Accent>
+              Eight tracks. <Accent>Zero fluff.</Accent>
             </span>
           }
           description="Pick a track and go deep — or jump straight to the topic you need with search."
         />
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {cards.map((c, i) => (
-            <Reveal key={c.id} delay={(i % 3) * 0.07}>
+            <Reveal key={c.id} delay={(i % 4) * 0.06}>
               <Link
                 to={c.to}
                 onPointerMove={trackSpotlight}

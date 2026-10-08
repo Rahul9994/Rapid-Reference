@@ -1,7 +1,7 @@
-import { Cpu, Database, Globe, MessageSquareQuote, Waypoints } from 'lucide-react'
+import { BrainCircuit, ChartScatter, Cpu, Database, Globe, MessageSquareQuote, Waypoints } from 'lucide-react'
 import { PythonIcon } from './Icons'
 
-export type CategoryIconKey = 'python' | 'dsa' | 'os' | 'dbms' | 'cn' | 'interview'
+export type CategoryIconKey = 'python' | 'dsa' | 'os' | 'dbms' | 'cn' | 'ai' | 'ml' | 'interview'
 
 export function CategoryIcon({ id, size = 18, className }: { id: string; size?: number; className?: string }) {
   switch (id) {
@@ -15,6 +15,10 @@ export function CategoryIcon({ id, size = 18, className }: { id: string; size?: 
       return <Database size={size} className={className} aria-hidden="true" />
     case 'cn':
       return <Globe size={size} className={className} aria-hidden="true" />
+    case 'ai':
+      return <BrainCircuit size={size} className={className} aria-hidden="true" />
+    case 'ml':
+      return <ChartScatter size={size} className={className} aria-hidden="true" />
     default:
       return <MessageSquareQuote size={size} className={className} aria-hidden="true" />
   }

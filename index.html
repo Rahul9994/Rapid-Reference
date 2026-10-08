@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="noir">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Rapid_Reference — Learn faster. Revise smarter.</title>
     <meta
       name="description"
-      content="Your fast-track reference for Python, DSA, OS, DBMS, Computer Networks and technical interviews — with Striver's A2Z DSA sheet progress tracking."
+      content="Your fast-track reference for Python, DSA, AI, ML, OS, DBMS, Computer Networks and technical interviews — with interactive AI/ML labs and Striver's A2Z DSA sheet progress tracking."
     />
-    <meta name="theme-color" content="#09090b" />
+    <meta name="theme-color" content="#0a0908" />
     <meta property="og:title" content="Rapid_Reference" />
     <meta property="og:description" content="Learn faster. Revise smarter. Python, DSA, OS, DBMS, CN notes + A2Z DSA sheet + interview FAQ." />
     <meta property="og:type" content="website" />
@@ -16,11 +16,11 @@
     <script>
       // Apply the saved theme before first paint to avoid a flash of the wrong theme.
       ;(function () {
-        var theme = 'dark'
+        var theme = 'noir'
         try {
           var saved = JSON.parse(localStorage.getItem('rr:theme') || '"system"')
           theme = saved === 'system'
-            ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+            ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'ivory' : 'noir')
             : saved
         } catch (e) {}
         document.documentElement.setAttribute('data-theme', theme)

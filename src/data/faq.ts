@@ -9,7 +9,9 @@ export const faqCategories = [
   { id: 'os', title: 'Operating Systems', hue: '#34d399' },
   { id: 'dbms', title: 'DBMS', hue: '#fbbf24' },
   { id: 'cn', title: 'Computer Networks', hue: '#22d3ee' },
-  { id: 'general', title: 'General Technical', hue: '#fb923c' },
+  { id: 'ml', title: 'Machine Learning', hue: '#f0aa6a' },
+  { id: 'ai', title: 'Artificial Intelligence', hue: '#d9a3ec' },
+  { id: 'general', title: 'General Technical', hue: '#facc15' },
   { id: 'hr', title: 'HR & Behavioral', hue: '#94a3b8' },
 ] as const
 

@@ -1,4 +1,6 @@
 export const themes = [
+  { id: 'noir', name: 'Noir', blurb: 'Black & champagne gold', mode: 'dark' },
+  { id: 'ivory', name: 'Ivory', blurb: 'Warm paper & ink', mode: 'light' },
   { id: 'dark', name: 'Dark', blurb: 'Zinc & violet glow', mode: 'dark' },
   { id: 'light', name: 'Light', blurb: 'Crisp & airy', mode: 'light' },
   { id: 'midnight', name: 'Midnight', blurb: 'Deep navy blues', mode: 'dark' },

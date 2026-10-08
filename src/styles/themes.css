@@ -411,3 +411,78 @@
   --medium: #a16207;
   --hard: #b42318;
 }
+
+/* Luxury pair — the defaults: black & champagne gold, and warm ivory & ink */
+[data-theme='noir'] {
+  color-scheme: dark;
+  --bg: #0a0908;
+  --bg-elev: #12110e;
+  --bg-soft: #1b1915;
+  --fg: #f4eee3;
+  --fg-muted: #b2a999;
+  --fg-subtle: #7c7467;
+  --border: rgb(245 226 190 / 0.09);
+  --border-strong: rgb(245 226 190 / 0.17);
+  --accent: #d6b273;
+  --accent-2: #86b9cc;
+  --accent-3: #e1887a;
+  --accent-fg: #15110a;
+  --shadow-color: 30 20% 2%;
+  --shadow-strength: 0.6;
+  --code-bg: #0d0c0a;
+  --code-fg: #e9e2d4;
+  --tk-keyword: #cfa4e3;
+  --tk-string: #a9c99a;
+  --tk-number: #e7a26c;
+  --tk-comment: #6f675b;
+  --tk-function: #8fb9de;
+  --tk-builtin: #7fc6bf;
+  --tk-title: #e3c27f;
+  --tk-operator: #a3c9d4;
+  --tk-meta: #e1887a;
+  --tk-literal: #e7a26c;
+  --tk-params: #e3c27f;
+  --easy: #7fc89a;
+  --medium: #e4ba68;
+  --hard: #e3786b;
+  --grad-a: #f3dcaa;
+  --grad-b: #d6b273;
+  --grad-c: #b88a52;
+}
+
+[data-theme='ivory'] {
+  color-scheme: light;
+  --bg: #f8f4ec;
+  --bg-elev: #fffdf8;
+  --bg-soft: #f0e9dc;
+  --fg: #1b1712;
+  --fg-muted: #5a5145;
+  --fg-subtle: #8c8273;
+  --border: rgb(60 45 20 / 0.1);
+  --border-strong: rgb(60 45 20 / 0.18);
+  --accent: #946c2c;
+  --accent-2: #2c6e86;
+  --accent-3: #b3524a;
+  --accent-fg: #fffdf8;
+  --shadow-color: 35 30% 25%;
+  --shadow-strength: 0.12;
+  --code-bg: #f4eee2;
+  --code-fg: #2a241c;
+  --tk-keyword: #7b3fa0;
+  --tk-string: #3e7a3a;
+  --tk-number: #b0561f;
+  --tk-comment: #9a907f;
+  --tk-function: #23619e;
+  --tk-builtin: #1d7676;
+  --tk-title: #93641a;
+  --tk-operator: #2c6e86;
+  --tk-meta: #b3524a;
+  --tk-literal: #b0561f;
+  --tk-params: #87581a;
+  --easy: #2f7d4f;
+  --medium: #a3701a;
+  --hard: #b3443a;
+  --grad-a: #b48a3e;
+  --grad-b: #8a6428;
+  --grad-c: #6b4a1c;
+}

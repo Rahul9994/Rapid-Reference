@@ -2,7 +2,8 @@ import { useRef, type PointerEvent as ReactPointerEvent } from 'react'
 import { motion, useMotionValue, useScroll, useTransform } from 'motion/react'
 import { ArrowRight, ListChecks, Sparkles } from 'lucide-react'
 import { bootDone, paletteOpen } from '../../lib/atom'
-import { totalTopics } from '../../data/notes'
+import { totalAllTopics } from '../../data/catalog'
+import { totalLabTopics } from '../../data/labs'
 import sheetMeta from '../../data/a2z-meta.json'
 import { ButtonLink } from '../ui/Button'
 import { Kbd, ModKey } from '../ui/misc'
@@ -75,7 +76,7 @@ export function Hero() {
               <Sparkles size={12} /> New
             </span>
             <span>
-              {totalTopics} topics · {sheetMeta.total} A2Z items · 12 themes
+              {totalAllTopics} topics · {totalLabTopics} live AI/ML labs · {sheetMeta.total} A2Z items
             </span>
             <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
             <span
@@ -121,7 +122,7 @@ export function Hero() {
         >
           Your{' '}
           <span className="font-serif text-[1.18em] italic text-gradient pr-0.5">fast-track</span>{' '}
-          reference for Python, DSA, OS, DBMS, Computer Networks and Technical Interviews.
+          reference for Python, DSA, AI, ML, OS, DBMS, Computer Networks and Technical Interviews.
         </motion.p>
 
         <motion.div

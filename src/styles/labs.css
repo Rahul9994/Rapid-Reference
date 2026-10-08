@@ -1,0 +1,173 @@
+/* ---------- Interactive labs (A.I / M.L) ---------- */
+
+.lab-frame {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--bg-elev) 96%, var(--accent) 4%),
+    color-mix(in oklab, var(--bg-elev) 88%, var(--bg))
+  );
+  box-shadow: var(--shadow-lift), inset 0 1px 0 color-mix(in oklab, var(--fg) 6%, transparent);
+}
+
+.lab-frame-glow {
+  background:
+    radial-gradient(60% 50% at 12% 0%, color-mix(in oklab, var(--lab-hue, var(--accent)) 12%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 100% 100%, color-mix(in oklab, var(--accent-2) 7%, transparent), transparent 70%);
+}
+
+.lab-stage {
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in oklab, var(--accent) 5%, transparent), transparent 60%),
+    color-mix(in oklab, var(--bg) 70%, var(--bg-elev));
+}
+
+.lab-code {
+  background: color-mix(in oklab, var(--code-bg) 88%, transparent);
+}
+
+/* SVG plot vocabulary */
+.viz-grid {
+  stroke: color-mix(in oklab, var(--fg) 6%, transparent);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.viz-axis {
+  stroke: color-mix(in oklab, var(--fg) 18%, transparent);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.viz-tick {
+  fill: var(--fg-subtle);
+  font-size: 10px;
+  font-family: var(--font-mono);
+}
+.viz-label {
+  fill: var(--fg-muted);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.viz-text {
+  fill: var(--fg);
+  font-family: var(--font-mono);
+}
+.viz-muted {
+  fill: var(--fg-muted);
+  font-family: var(--font-mono);
+}
+
+/* Range slider */
+.viz-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+.viz-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0 var(--pct, 50%),
+    color-mix(in oklab, var(--fg) 12%, transparent) var(--pct, 50%) 100%
+  );
+}
+.viz-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--fg) 12%, transparent);
+}
+.viz-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.viz-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  border-radius: 999px;
+  background: var(--fg);
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent);
+  transition: transform 0.2s var(--ease-out-quint);
+}
+.viz-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--fg);
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent);
+}
+.viz-range:hover::-webkit-slider-thumb,
+.viz-range:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.viz-range:focus-visible {
+  outline: none;
+}
+.viz-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+/* Inline visualizations inside lab notes */
+.prose-rr .viz-slot {
+  margin: 2rem 0;
+}
+.prose-rr .viz-slot:empty {
+  min-height: 320px;
+  border-radius: 26px;
+  border: 1px solid var(--border);
+}
+
+/* Math */
+.prose-rr .math-block {
+  margin: 1.4rem 0;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--bg-elev) 100%, transparent),
+    color-mix(in oklab, var(--bg-elev) 70%, var(--bg))
+  );
+  text-align: center;
+}
+.prose-rr .math-block .katex-display {
+  margin: 0;
+}
+.prose-rr .katex {
+  font-size: 1.08em;
+  color: var(--fg);
+}
+.prose-rr .math-inline .katex {
+  font-size: 1.03em;
+}
+.prose-rr h2 .katex,
+.prose-rr h3 .katex {
+  font-size: 0.95em;
+}
+
+/* Signal flowing along network edges */
+@keyframes viz-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+@keyframes viz-flow-back {
+  to {
+    stroke-dashoffset: 24;
+  }
+}
+.viz-flow {
+  animation: viz-flow 0.9s linear infinite;
+}
+.viz-flow-back {
+  animation: viz-flow-back 0.9s linear infinite;
+}

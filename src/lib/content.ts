@@ -1,4 +1,5 @@
 import type { CategoryId } from '../data/notes'
+import type { TrackId } from '../data/labs'
 import { faqCategories, type FaqCategoryId, type FaqItem } from '../data/faq'
 import { slugify } from './utils'
 
@@ -32,6 +33,46 @@ export async function loadNote(category: CategoryId, slug: string): Promise<stri
 
 export function prefetchNotes(category: CategoryId) {
   loadNoteBundle(category).catch(() => {})
+}
+
+// A.I / M.L notes: one chunk per track.
+const labLoaders: Record<TrackId, () => Promise<{ default: Bundle }>> = {
+  ai: () => import('../content/ai/index.ts'),
+  ml: () => import('../content/ml/index.ts'),
+}
+
+const labCache = new Map<TrackId, Promise<Bundle>>()
+
+export function loadLabBundle(track: TrackId): Promise<Bundle> {
+  let p = labCache.get(track)
+  if (!p) {
+    p = labLoaders[track]().then((m) => m.default)
+    p.catch(() => labCache.delete(track))
+    labCache.set(track, p)
+  }
+  return p
+}
+
+export async function loadLabNote(track: TrackId, slug: string): Promise<string | undefined> {
+  const bundle = await loadLabBundle(track)
+  return bundle[`./${slug}.md`]
+}
+
+export function prefetchLab(track: TrackId) {
+  loadLabBundle(track).catch(() => {})
+}
+
+let katexPromise: Promise<typeof import('katex')['default']> | null = null
+
+/** KaTeX (+ its stylesheet) is only needed by the lab notes, so load it on demand. */
+export function loadKatex() {
+  if (!katexPromise) {
+    katexPromise = Promise.all([import('katex'), import('katex/dist/katex.min.css')]).then(([m]) => m.default)
+    katexPromise.catch(() => {
+      katexPromise = null
+    })
+  }
+  return katexPromise
 }
 
 let faqPromise: Promise<FaqItem[]> | null = null

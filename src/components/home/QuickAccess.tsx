@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { ArrowRight, Bookmark, History, Keyboard, Shuffle, Target } from 'lucide-react'
-import { topicByKey } from '../../data/notes'
+import { lookupTopic } from '../../data/catalog'
 import { bookmarksStore, recentStore } from '../../lib/storage'
 import { paletteOpen } from '../../lib/atom'
 import { useRandomActions } from '../../lib/random'
@@ -28,10 +28,10 @@ export function QuickAccess() {
   const recent = recentStore.use()
   const bookmarks = bookmarksStore.use()
   const { randomTopic, randomProblem } = useRandomActions()
-  const last = recent.map((r) => topicByKey.get(r.key)).find(Boolean)
-  const recentList = recent.map((r) => topicByKey.get(r.key)).filter((t) => t !== undefined).slice(1, 4)
-  const saved = bookmarks.map((k) => topicByKey.get(k)).filter((t) => t !== undefined)
-  const start = topicByKey.get('python/basics')!
+  const last = recent.map((r) => lookupTopic(r.key)).find(Boolean)
+  const recentList = recent.map((r) => lookupTopic(r.key)).filter((t) => t !== undefined).slice(1, 4)
+  const saved = bookmarks.map((k) => lookupTopic(k)).filter((t) => t !== undefined)
+  const start = lookupTopic('python/basics')!
 
   return (
     <section className="relative py-24 sm:py-32" aria-labelledby="quick-title">
@@ -53,8 +53,8 @@ export function QuickAccess() {
             {(() => {
               const t = last ?? start
               return (
-                <Link to={`/notes/${t.category.id}/${t.slug}`} className="group mt-4 block">
-                  <div className="text-[13px] text-muted">{t.category.title}</div>
+                <Link to={t.path} className="group mt-4 block">
+                  <div className="text-[13px] text-muted">{t.groupTitle}</div>
                   <div className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-fg transition-colors group-hover:text-accent">
                     {t.title}
                   </div>
@@ -70,7 +70,7 @@ export function QuickAccess() {
                 {recentList.map((t) => (
                   <Link
                     key={t.key}
-                    to={`/notes/${t.category.id}/${t.slug}`}
+                    to={t.path}
                     className="rounded-full border border-line px-3 py-1 text-[12.5px] text-muted transition-colors hover:border-line-strong hover:text-fg"
                   >
                     {t.title}
@@ -88,7 +88,7 @@ export function QuickAccess() {
               <ul className="mt-4 space-y-2">
                 {saved.slice(0, 4).map((t) => (
                   <li key={t.key}>
-                    <Link to={`/notes/${t.category.id}/${t.slug}`} className="block truncate text-sm text-fg hover:text-accent">
+                    <Link to={t.path} className="block truncate text-sm text-fg hover:text-accent">
                       {t.title}
                     </Link>
                   </li>

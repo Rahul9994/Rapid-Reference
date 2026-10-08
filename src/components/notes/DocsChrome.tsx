@@ -46,11 +46,14 @@ export function Drawer({
   onClose,
   title,
   children,
+  desktop = false,
 }: {
   open: boolean
   onClose: () => void
   title: string
   children: ReactNode
+  /** Also usable on large screens (notes hide it there because the sidebar is visible). */
+  desktop?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null)
   useBodyScrollLock(open)
@@ -58,7 +61,7 @@ export function Drawer({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[70] lg:hidden" onKeyDown={(e) => e.key === 'Escape' && onClose()}>
+        <div className={cn('fixed inset-0 z-[70]', !desktop && 'lg:hidden')} onKeyDown={(e) => e.key === 'Escape' && onClose()}>
           <motion.div
             className="absolute inset-0 bg-black/45 backdrop-blur-[2px]"
             initial={{ opacity: 0 }}
@@ -81,7 +84,7 @@ export function Drawer({
             onDragEnd={(_, info) => {
               if (info.offset.x < -80 || info.velocity.x < -500) onClose()
             }}
-            className="glass-strong absolute inset-y-0 left-0 flex w-[86vw] max-w-[340px] flex-col border-r border-line-strong px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] shadow-[var(--shadow-lift)]"
+            className="glass-strong absolute inset-y-0 left-0 flex w-[86vw] max-w-[360px] flex-col border-r border-line-strong px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] shadow-[var(--shadow-lift)]"
           >
             <div className="mb-4 flex items-center justify-between">
               <span className="text-sm font-semibold text-fg">{title}</span>
